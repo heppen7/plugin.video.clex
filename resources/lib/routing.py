@@ -5,7 +5,20 @@ import xbmcaddon
 from ast import literal_eval
 from urllib.parse import urlsplit, urlencode, parse_qs
 
-url = sys.argv[0]
+
+def make_path(*args):
+    if args:
+        url_args = args[0]
+        return urlencode(url_args)
+
+def parse_args(args):
+    result = {}
+    for k, v in args.items():
+        try:
+            result[k] = literal_eval(v[0])
+        except:
+            result[k] = v
+    return result
 
 
 class Plugin:
@@ -22,7 +35,7 @@ class Plugin:
     
     def run(self):
         if len(sys.argv) > 2:
-            self.args = Url().parse_args(parse_qs(sys.argv[2].lstrip('?')))
+            self.args = parse_args(parse_qs(sys.argv[2].lstrip('?')))
         self.dispatch(self.args)
     
     def route(self, path, *args, **kwargs):
@@ -34,14 +47,13 @@ class Plugin:
     def add_route(self, func, path, *args, **kwargs):
         self._rules.setdefault(path, []).append(func)
             
-    def url_for(self, func, *args, **kwargs):
-        for value in self._rules.items():
-            if func in value[1]:
-                for func in self._rules[value[0]]:
-                    return self.url_path(args[0], func, **kwargs)
+    def url_for(self, func, **kwargs):
+        for path, funcs in self._rules.items():
+            if func in funcs:
+                return self.url_path(path, **kwargs)
     
     def url_path(self, path, *args, **kwargs):
-        query = Url().make_path(kwargs)
+        query = make_path(kwargs)
         return f"{self.base_url}{path}?{query}"
     
     def dispatch(self, *args):
@@ -50,20 +62,3 @@ class Plugin:
             [func(**args) for func in self._rules[self.path.path]]
         except TypeError:
             [func() for func in self._rules[self.path.path]]
-        
-class Url:
-    def make_path(self, *args, **kwargs):
-        if args:
-            url_args = args[0]
-            return urlencode(url_args)
-    
-    def parse_args(self, args):
-        result = {}
-        for k, v in args.items():
-            try:
-                evald = literal_eval(v[0])
-                if isinstance(evald, dict):
-                    result[k] = evald
-            except:
-                result[k] = v
-        return result
