@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.clex" name="Clex - Plex client" version="0.01" provider-name="heppen">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.requests" />
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="main.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <description lang="en">Clex is a simple client for managing and viewing Plex Media Server's conent</description>
+	<description lang="pl">Clex jest prostym klientem do zarządzania i wyświetlania treści z Plex Media Server.</description>
+	<language>pl</language>
+	<platform>all</platform>
+	<license>MIT</license>
+    <website>https://github.com/heppenowski/</website>
+    <source>https://github.com/heppenowski/plugin.video.clex</source>
+    <news></news>
+    <assets>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.jpg</fanart>
+    </assets>
+    <reuselanguageinvoker>false</reuselanguageinvoker>
+  </extension>
+</addon>
