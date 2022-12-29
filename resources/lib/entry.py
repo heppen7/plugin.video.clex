@@ -2,9 +2,9 @@ import xbmc
 import xbmcgui
 import xbmcplugin
 
-from .routing import Plugin
+from .routing import Router
 
-routing = Plugin()
+routing = Router()
 
 query = ['Konto', 'Odtwarzanie']
 query_d = {

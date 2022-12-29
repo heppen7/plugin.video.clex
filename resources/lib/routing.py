@@ -1,5 +1,4 @@
 import sys
-import xbmc
 import xbmcaddon
 
 from ast import literal_eval
@@ -21,7 +20,7 @@ def parse_args(args):
     return result
 
 
-class Plugin:
+class Router:
     def __init__(self, base=f'plugin://{xbmcaddon.Addon().getAddonInfo("id")}/') -> None:
         self._rules = {}
         self.args = {}
