@@ -3,15 +3,11 @@ import xbmcgui
 import xbmcplugin
 
 from .routing import Router
+from .plex.signin import SignIn
 
 routing = Router()
 
 query = ['Konto', 'Odtwarzanie']
-query_d = {
-    'user': 'test',
-    'pass': 'mleko'
-}
-query_s = 'jakiś string przekazany dalej...'
 
 def run():
     routing.run()
@@ -20,15 +16,13 @@ def run():
 def index():
     li = xbmcgui.ListItem('Login')
     li2 = xbmcgui.ListItem('Ustawienia')
-    xbmcplugin.addDirectoryItem(routing.handle, routing.url_for(login), li, True)
+    xbmcplugin.addDirectoryItem(routing.handle, routing.url_for(login), li, False)
     xbmcplugin.addDirectoryItem(routing.handle, routing.url_for(settings, query=query), li2, True)
     xbmcplugin.endOfDirectory(routing.handle)
     
 @routing.route('/login')
 def login():
-    li = xbmcgui.ListItem('Logout')
-    xbmcplugin.addDirectoryItem(routing.handle, routing.url_for(index), li, True)
-    xbmcplugin.endOfDirectory(routing.handle)
+    SignIn().pin_asking()
     
 @routing.route('/settings')
 def settings(query):
