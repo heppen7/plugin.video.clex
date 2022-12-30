@@ -1,21 +1,9 @@
 from ..utils.settings import Settings
-from .connections import Connections
 
 settings = Settings()
 
-import xbmc
 
 class PlexApi:
-    def __init__(self) -> None:
-        self.base_plex = 'https://plex.tv'
-        xbmc.log(f'{Connections().get_resources()}', level=1)
-        self.pms_ip = Connections().get_resources()[0]['uri']
-        if settings.get_setting('access_token') == '':
-            self.pms_token = None
-        else:
-            self.pms_token = settings.get_setting('access_token')
-            
-    
     # plex
     def pins(self):
         return {
@@ -47,3 +35,18 @@ class PlexApi:
             'url': '{}/playlists?X-Plex-Token={}'.format(self.pms_ip, self.pms_token),
             'method': 'get'
         }
+        
+    def libraries(self):
+        return {
+            'url': '{}/library/sections/?X-Plex-Token={}'.format(self.pms_ip, self.pms_token),
+            'method': 'get'
+        }
+    
+    def library(self, lib_id):
+        return {
+            'url': '{}/library/sections/{}/all?X-Plex-Token={}'.format(self.pms_ip, lib_id, self.pms_token),
+            'method': 'get'
+        }
+        
+    def art(self, url):
+        return '{}{}?X-Plex-Token={}'.format(self.pms_ip, url, self.pms_token)
