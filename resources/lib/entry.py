@@ -22,7 +22,7 @@ def index():
     
 @routing.route('/login')
 def login():
-    SignIn().pin_asking()
+    SignIn().signin()
     
 @routing.route('/settings')
 def settings(query):

@@ -1,0 +1,33 @@
+# Kodi Media Center language file
+# Addon Name: Clex - Plex Client
+# Addon id: plugin.video.clex
+# Addon Provider: heppen
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Polish (https://kodi.weblate.cloud/languages/pl_pl/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32001"
+msgid "Your PIN Code"
+msgstr "Twój kod PIN"
+
+msgctxt "#32002"
+msgid "It's your pin code: [B]{}[/B]. It will be active for next 900 secods. Open [B]https://plex.tv/link[/B] website and enter this code to link this device with your account."
+msgstr "To twój kod pin: [B]{}[/B]. Będzie aktywny następne 900 sekund. Otwórz stronę [B]https://plex.tv/link[/B] i wpisz podany kod pin aby połączyć to urządzenie z twoim kontem."
+
+msgctxt "#32003"
+msgid "Done"
+msgstr "Zrobione"
+
+msgctxt "#32004"
+msgid "Close"
+msgstr "Zamknij"

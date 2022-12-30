@@ -2,8 +2,10 @@ import platform
 
 from .config import CONFIG
 from .device import Device
+from .settings import Settings
 
 device = Device()
+settings = Settings()
 
 
 class Headers:
@@ -22,4 +24,9 @@ class Headers:
             'X-Plex-Platform-Version': platform.uname()[2],
             'X-Plex-Version': CONFIG['version'],
             'X-Plex-Provides': 'player,controller'
+        }
+        
+    def plex_token(self):
+        return {
+            'X-Plex-Token': settings.get_setting('auth_token')
         }
