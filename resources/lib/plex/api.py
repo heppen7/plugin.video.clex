@@ -48,5 +48,5 @@ class PlexApi:
             'method': 'get'
         }
         
-    def art(self, url):
+    def media(self, url):
         return '{}{}?X-Plex-Token={}'.format(self.pms_ip, url, self.pms_token)

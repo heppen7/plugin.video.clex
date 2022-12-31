@@ -5,6 +5,7 @@ from ..utils.common import Common
 from ..utils.headers import Headers
 from ..utils.request import Request
 from ..utils.settings import Settings
+from ..super_info import Super_Info
 from .api import PlexApi
 
 headers = Headers()
@@ -12,7 +13,7 @@ s = Request() # session
 com = Common()
 settings = Settings()
 
-class Connections(PlexApi):
+class Connections(PlexApi, Super_Info):
     def __init__(self) -> None:
         super(PlexApi).__init__()
         self.base_plex = 'https://plex.tv'
@@ -48,13 +49,17 @@ class Connections(PlexApi):
             return libraries
         
     def get_library(self, lib_id):
-        videos = []
         data = s.request(self.library(lib_id)['method'], self.library(lib_id)['url'])
         if data.status_code == 200:
-            for video in xml.fromstring(data.content):
-                videos.append({
-                    'title': video.attrib.get("title"),
-                    'poster': self.art(video.attrib.get("thumb")),
-                    'fanart': self.art(video.attrib.get("art"))
-                })
-            return videos
+            return self.extract_info(data.content)
+    
+    def get_seasons(self, url):
+        data = s.request('get', url)
+        if data.status_code == 200:
+            return self.extract_info(data.content)
+    
+    def get_episodes(self, url):
+        data = s.request('get', url)
+        if data.status_code == 200:
+            return self.extract_info(data.content)
+        
