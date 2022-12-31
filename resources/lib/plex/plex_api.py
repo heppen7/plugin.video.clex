@@ -1,10 +1,12 @@
-from ..utils.settings import Settings
-
-settings = Settings()
+from ..utils.config import get_setting
 
 
 class PlexApi:
-    # plex
+    def __init__(self) -> None:
+        self.base_plex = 'https://plex.tv'
+        self.pms_ip = get_setting('pms_ip')
+        self.pms_token = get_setting('pms_token')
+    
     def pins(self):
         return {
             'url': '{}/api/v2/pins'.format(self.base_plex),

@@ -1,7 +1,7 @@
 import xml.etree.ElementTree as xml
 
-
 class Super_Info:
+    
     def extract_info(self, data):
         group = xml.fromstring(data)
         if group.attrib.get('viewGroup') == 'movie':

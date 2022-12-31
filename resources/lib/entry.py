@@ -3,30 +3,31 @@ from xbmcgui import ListItem
 import xbmcplugin
 
 from .routing import Router
-from .utils.settings import Settings
-from .plex.signin import SignIn
+from .utils.config import get_setting
+from .utils.dialogs import Dialogs
+from .plex.account import Account
 from .plex.connections import Connections
 
 routing = Router()
-settings = Settings()
 conn = Connections()
+account = Account()
 
 query = ['Konto', 'Odtwarzanie']
 
 def run():
-    routing.run()
+    if not account.data():
+        account.signin()
+    else:
+        routing.run()
 
 @routing.route('/')
 def index():
-    if isinstance(settings.get_setting('auth_token'), str) and settings.get_setting('auth_token') != '':
-        libraries = conn.get_libraries()
-        for lib in libraries:
-            li = ListItem(lib['title'])
-            xbmcplugin.addDirectoryItem(routing.handle, routing.url_for(library, id=lib['id']), li, True)
-        xbmcplugin.addDirectoryItem(routing.handle, routing.url_for(manage, query=query), ListItem('Zarządzanie'), True)
-        xbmcplugin.endOfDirectory(routing.handle)
-    else:
-        SignIn().signin()
+    libraries = conn.get_libraries()
+    for lib in libraries:
+        li = ListItem(lib['title'])
+        xbmcplugin.addDirectoryItem(routing.handle, routing.url_for(library, id=lib['id']), li, True)
+    xbmcplugin.addDirectoryItem(routing.handle, routing.url_for(manage, query=query), ListItem('Zarządzanie'), True)
+    xbmcplugin.endOfDirectory(routing.handle)
         
 @routing.route('/library')
 def library(id):
