@@ -74,7 +74,6 @@ class Connections(PlexApi, Super_Info):
             return genres
         
     def get_genre(self, id):
-        genre = []
         data = self.request(self.genre()['method'], self.genre()['url'], params={'genre': id})
         if data.status_code == 200:
             return self.extract_info(data.content)
