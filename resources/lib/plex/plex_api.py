@@ -7,6 +7,12 @@ class PlexApi:
         self.pms_ip = get_setting('pms_ip')
         self.pms_token = get_setting('pms_token')
     
+    def metadata(self, url):
+        return {
+            'url': '{}'.format(url),
+            'method': 'get'
+        }
+    
     def pins(self):
         return {
             'url': '{}/api/v2/pins'.format(self.base_plex),
@@ -35,6 +41,18 @@ class PlexApi:
     def playlists(self):
         return {
             'url': '{}/playlists?X-Plex-Token={}'.format(self.pms_ip, self.pms_token),
+            'method': 'get'
+        }
+        
+    def hubs(self):
+        return {
+            'url': '{}/hubs?X-Plex-Token={}'.format(self.pms_ip, self.pms_token),
+            'method': 'get'
+        }
+    
+    def hub(self, hub_key):
+        return {
+            'url': '{}{}?X-Plex-Token={}'.format(self.pms_ip, hub_key, self.pms_token),
             'method': 'get'
         }
         

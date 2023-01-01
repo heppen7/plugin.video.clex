@@ -1,9 +1,14 @@
 import xml.etree.ElementTree as xml
+import xbmc
 
 class Super_Info:
     
-    def extract_info(self, data):
+    def extract_info(self, data, view_group=None):
         group = xml.fromstring(data)
+        if view_group == 'mixed':
+            return self._hubs(xml.fromstring(data))
+        if view_group == 'hub' or view_group == 'metadata':
+            return self._metadata(xml.fromstring(data))
         if group.attrib.get('viewGroup') == 'movie':
             return self.movie(xml.fromstring(data))
         elif group.attrib.get('viewGroup') == 'show':
@@ -13,6 +18,29 @@ class Super_Info:
         elif group.attrib.get('viewGroup') == 'episode':
             return self.episode(xml.fromstring(data))
             
+    def _hubs(self, data):
+        hubs = []
+        for hub in data:
+            hubs.append({
+                'hub_name': hub.attrib.get('title'),
+                'key': hub.attrib.get('hubKey'),
+                'hub_size': hub.attrib.get('size')
+            })
+        return hubs
+            
+    def _metadata(self, videos):
+        info = []
+        for video in videos:
+            if video.attrib.get('type') == 'movie':
+                info.append(self.movie(videos))
+            elif video.attrib.get('type') == 'show':
+                info.append(self.show(videos))
+            elif video.attrib.get('type') == 'season':
+                info.append(self.season(videos))
+            elif video.attrib.get('type') == 'episode':
+                info.append(self.episode(videos))
+        return info
+    
     def movie(self, videos):
         info = []
         file = None

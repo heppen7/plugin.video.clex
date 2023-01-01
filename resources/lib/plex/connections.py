@@ -45,6 +45,21 @@ class Connections(PlexApi, Super_Info):
         data = self.request(self.playlists()['method'], self.playlists()['url'])
         xbmc.log(f'{data.content}', level=1)
         
+    def get_hubs(self):
+        data = self.request(self.hubs()['method'], self.hubs()['url'])
+        if data.status_code == 200:
+            return self.extract_info(data.content, 'mixed')
+
+    def get_hub(self, hub_id):
+        data = self.request(self.hub(hub_id)['method'], self.hub(hub_id)['url'])
+        if data.status_code == 200:
+            return self.extract_info(data.content, 'hub')
+        
+    def get_metadata(self, url):
+        data = self.request(self.metadata(url)['method'], self.metadata(url)['url'])
+        if data.status_code == 200:
+            return self.extract_info(data.content, 'metadata')
+        
     def get_libraries(self):
         libraries = []
         data = self.request(self.libraries()['method'], self.libraries()['url'])
