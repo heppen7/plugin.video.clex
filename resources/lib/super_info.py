@@ -1,5 +1,4 @@
 import xml.etree.ElementTree as xml
-import xbmc
 
 class Super_Info:
     
