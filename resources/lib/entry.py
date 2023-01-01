@@ -1,7 +1,3 @@
-import xbmc
-from xbmcgui import ListItem
-import xbmcplugin
-
 from .utils.common import AddItem
 from .routing import Router
 from .plex.account import Account
@@ -22,12 +18,6 @@ def run():
         
 @routing.route('/')
 def index():
-    # xbmcplugin.addDirectoryItem(routing.handle, , ListItem('Hub'), True)
-    # xbmcplugin.addDirectoryItem(routing.handle, routing.url_for(genres), ListItem('Gatunki'), True)
-    # xbmcplugin.addDirectoryItem(routing.handle, routing.url_for(libraries), ListItem('Biblioteka'), True)
-    # xbmcplugin.addDirectoryItem(routing.handle, routing.url_for(manage, query=query), ListItem('Zarządzanie'), True)
-    # xbmcplugin.endOfDirectory(routing.handle)
-    
     with AddItem() as item:
         item.add('Hub', routing.url_for(hubs))
         item.add('Gatunki', routing.url_for(genres))
@@ -62,9 +52,9 @@ def hub(key):
                 if 'children' in video['key']:
                     item.add(video['title'], routing.url_for(metadata, url=video['key'], info=info), info=info, art=art)
                 else:
-                    item.add(video['title'], routing.url_for(metadata, url=video['key'], info=info), info=info, art=art, playable=True)
+                    item.add(video['title'], routing.url_for(metadata, url=video['key'], info=info), info=info, art=art, folder=False)
             else:
-                item.add(video['title'], routing.url_for(play, url=video['file'], info=info), info=info, art=art, playable=True)
+                item.add(video['title'], routing.url_for(play, url=video['file'], info=info), info=info, art=art, folder=False)
 
 @routing.route('/genres')
 def genres():
@@ -88,7 +78,7 @@ def genre(key):
                 'thumb': video['poster'],
                 'fanart': video['fanart']
             }
-            item.add(video['title'], routing.url_for(play, url=video['file'], info=info), playable=True, info=info, art=art)
+            item.add(video['title'], routing.url_for(play, url=video['file'], info=info), folder=False, info=info, art=art)
 
 @routing.route('/libraries')
 def libraries():
@@ -115,7 +105,7 @@ def library(id):
             if video.get('key'):
                 item.add(video['title'], routing.url_for(seasons, url=video['key'], info=info), info=info, art=art)
             else:
-                item.add(video['title'], routing.url_for(play, url=video['file'], info=info), playable=True, info=info, art=art)
+                item.add(video['title'], routing.url_for(play, url=video['file'], info=info), folder=False, info=info, art=art)
     
 @routing.route('/seasons')
 def seasons(url, info):
@@ -138,7 +128,7 @@ def seasons(url, info):
             if s.get('key'):
                 item.add(s['title'], routing.url_for(episodes, url=s['key'], info=info), info=info, art=art)
             else:
-                item.add(s['title'], routing.url_for(play, url=s['file'], info=info), info=info, art=art, playable=True)
+                item.add(s['title'], routing.url_for(play, url=s['file'], info=info), info=info, art=art, folder=False)
     
     
 @routing.route('/episodes')
@@ -159,7 +149,7 @@ def episodes(url, info):
                 'thumb': e['poster'],
                 'fanart': e['fanart']
             }
-            item.add(e['title'], routing.url_for(play, url=e['file'], info=info), info=info, art=art, playable=True)
+            item.add(e['title'], routing.url_for(play, url=e['file'], info=info), info=info, art=art, folder=False)
     
 @routing.route('/video')
 def metadata(url, info):
@@ -181,9 +171,8 @@ def play(url, info):
         file = url[0]
     else:
         file = url
-    li = ListItem(info['title']) 
-    li.setInfo('video', info)
-    xbmc.Player().play(item=file, listitem=li)
+    with AddItem() as item:
+        item.play(info['title'], file, info=info)
 
 
 @routing.route('/settings')
