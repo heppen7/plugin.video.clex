@@ -34,6 +34,7 @@ class Account(Connections):
             if dialog.pin_code(pin_code['code']):
                 token = self.token_asking(pin_code['id'])
                 set_setting('auth_token', token)
+                return True
 
     def pms_data(self):
         ip = get_setting('pms_ip')

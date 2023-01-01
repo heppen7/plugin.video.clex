@@ -55,6 +55,9 @@ class Router:
         query = make_path(kwargs)
         return f"{self.base_url}{path}?{query}"
     
+    def redirect(self, path):
+        self.dispatch(path)
+    
     def dispatch(self, *args):
         args = args[0]
         try:

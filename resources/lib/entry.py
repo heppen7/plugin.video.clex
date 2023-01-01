@@ -14,7 +14,8 @@ query = ['Konto', 'Odtwarzanie']
 
 def run():
     if not account.data():
-        account.signin()
+        if account.signin():
+            routing.redirect('/')
     else:
         routing.run()
         
