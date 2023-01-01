@@ -21,6 +21,7 @@ def run():
 @routing.route('/')
 def index():
     xbmcplugin.addDirectoryItem(routing.handle, routing.url_for(hubs), ListItem('Hub'), True)
+    xbmcplugin.addDirectoryItem(routing.handle, routing.url_for(genres), ListItem('Gatunki'), True)
     xbmcplugin.addDirectoryItem(routing.handle, routing.url_for(libraries), ListItem('Biblioteka'), True)
     xbmcplugin.addDirectoryItem(routing.handle, routing.url_for(manage, query=query), ListItem('Zarządzanie'), True)
     xbmcplugin.endOfDirectory(routing.handle)
@@ -58,6 +59,34 @@ def hub(key):
                 xbmcplugin.addDirectoryItem(routing.handle, routing.url_for(metadata, url=video['key'], info=info), li)
         else:
             xbmcplugin.addDirectoryItem(routing.handle, routing.url_for(play, url=video['file'], info=info), li)
+    xbmcplugin.endOfDirectory(routing.handle)
+
+@routing.route('/genres')
+def genres():
+    genres = conn.get_genres()
+    for g in genres:
+        li = ListItem(g['name'])
+        xbmcplugin.addDirectoryItem(routing.handle, routing.url_for(genre, key=g['key']), li, True)
+    xbmcplugin.endOfDirectory(routing.handle)
+       
+@routing.route('/genre') 
+def genre(key):
+    titles = conn.get_genre(key)
+    for video in titles:
+        info = {
+            'title': video['title'],
+            'plot': video['summary'],
+            'plotoutline': video['tagline']
+        }
+        art = {
+            'poster': video['poster'],
+            'thumb': video['poster'],
+            'fanart': video['fanart']
+        }
+        li = ListItem(video['title'])
+        li.setInfo('video', info)
+        li.setArt(art)
+        xbmcplugin.addDirectoryItem(routing.handle, routing.url_for(play, url=video['file'], info=info), li)
     xbmcplugin.endOfDirectory(routing.handle)
 
 @routing.route('/libraries')

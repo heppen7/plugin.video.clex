@@ -60,6 +60,25 @@ class Connections(PlexApi, Super_Info):
         if data.status_code == 200:
             return self.extract_info(data.content, 'metadata')
         
+    def get_genres(self):
+        genres = []
+        data = self.request(self.genres()['method'], self.genres()['url'])
+        if data.status_code == 200:
+            for directory in xml.fromstring(data.content):
+                if directory.get('type') == 'genre':
+                    genres.append({
+                        'name': directory.attrib.get('title'), 
+                        'key': directory.attrib.get('key'), 
+                        'fast_key': directory.attrib.get('fastKey')
+                    })
+            return genres
+        
+    def get_genre(self, id):
+        genre = []
+        data = self.request(self.genre()['method'], self.genre()['url'], params={'genre': id})
+        if data.status_code == 200:
+            return self.extract_info(data.content)
+        
     def get_libraries(self):
         libraries = []
         data = self.request(self.libraries()['method'], self.libraries()['url'])

@@ -56,6 +56,18 @@ class PlexApi:
             'method': 'get'
         }
         
+    def genres(self):
+        return {
+            'url': '{}/library/sections/1/genre?X-Plex-Token={}'.format(self.pms_ip, self.pms_token),
+            'method': 'get'
+        }   
+        
+    def genre(self):
+        return {
+            'url': '{}/library/sections/1/all?X-Plex-Token={}'.format(self.pms_ip, self.pms_token),
+            'method': 'get'
+        }    
+    
     def libraries(self):
         return {
             'url': '{}/library/sections/?X-Plex-Token={}'.format(self.pms_ip, self.pms_token),
