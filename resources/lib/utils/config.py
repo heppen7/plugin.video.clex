@@ -108,3 +108,8 @@ def plex_token():
     return {
         'X-Plex-Token': get_setting('auth_token')
     }
+    
+def container_size():
+    return {
+        'count': 40
+    }

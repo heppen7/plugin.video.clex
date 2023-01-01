@@ -2,7 +2,7 @@ import xbmc
 import requests
 import xml.etree.ElementTree as xml
 
-from ..utils.config import plex_identification, plex_token, set_setting
+from ..utils.config import plex_identification, plex_token, container_size, set_setting
 from .plex_api import PlexApi
 from ..super_info import Super_Info
 
@@ -46,7 +46,8 @@ class Connections(PlexApi, Super_Info):
         xbmc.log(f'{data.content}', level=1)
         
     def get_hubs(self):
-        data = self.request(self.hubs()['method'], self.hubs()['url'])
+        params = container_size()
+        data = self.request(self.hubs()['method'], self.hubs()['url'], params=params)
         if data.status_code == 200:
             return self.extract_info(data.content, 'mixed')
 
