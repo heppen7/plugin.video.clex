@@ -2,6 +2,20 @@ import xml.etree.ElementTree as xml
 
 class Super_Info:
     
+    def meta_info(self, info):
+        return {
+            'title': info.get('title'),
+            'plot': info.get('summary'),
+            'plotoutline': info.get('tagline')
+        }
+    
+    def meta_art(self, art):
+        return {
+            'poster': art.get('poster'),
+            'thumb': art.get('poster'),
+            'fanart': art.get('fanart')
+        }
+    
     def extract_info(self, data, view_group=None):
         group = xml.fromstring(data)
         if view_group == 'mixed':

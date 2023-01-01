@@ -38,16 +38,8 @@ def hub(key):
     videos = conn.get_hub(key[0])
     with AddItem() as item:
         for video in videos[0]:
-            info = {
-                'title': video['title'],
-                'plot': video['summary'],
-                'plotoutline': video['tagline']
-            }
-            art = {
-                'poster': video['poster'],
-                'thumb': video['poster'],
-                'fanart': video['fanart']
-            }
+            info = conn.meta_info(video)
+            art = conn.meta_art(video)
             if video.get('key'):
                 if 'children' in video['key']:
                     item.add(video['title'], routing.url_for(metadata, url=video['key'], info=info), info=info, art=art)
@@ -68,16 +60,8 @@ def genre(key):
     titles = conn.get_genre(key)
     with AddItem() as item:
         for video in titles:
-            info = {
-                'title': video['title'],
-                'plot': video['summary'],
-                'plotoutline': video['tagline']
-            }
-            art = {
-                'poster': video['poster'],
-                'thumb': video['poster'],
-                'fanart': video['fanart']
-            }
+            info = conn.meta_info(video)
+            art = conn.meta_art(video)
             item.add(video['title'], routing.url_for(play, url=video['file'], info=info), folder=False, info=info, art=art)
 
 @routing.route('/libraries')
@@ -92,16 +76,8 @@ def library(id):
     videos = conn.get_library(id)
     with AddItem() as item:
         for video in videos:
-            info = {
-                'title': video['title'],
-                'plot': video['summary'],
-                'plotoutline': video['tagline']
-            }
-            art = {
-                'poster': video['poster'],
-                'thumb': video['poster'],
-                'fanart': video['fanart']
-            }
+            info = conn.meta_info(video)
+            art = conn.meta_art(video)
             if video.get('key'):
                 item.add(video['title'], routing.url_for(seasons, url=video['key'], info=info), info=info, art=art)
             else:
@@ -116,15 +92,8 @@ def seasons(url, info):
         season = conn.get_episodes(url)
     with AddItem() as item:
         for s in season:
-            info = {
-                'title': s['title'],
-                'plot': s['summary']
-            }
-            art = {
-                'poster': s['poster'],
-                'thumb': s['poster'],
-                'fanart': s['fanart']
-            }
+            info = conn.meta_info(s)
+            art = conn.meta_art(s)
             if s.get('key'):
                 item.add(s['title'], routing.url_for(episodes, url=s['key'], info=info), info=info, art=art)
             else:
@@ -140,15 +109,8 @@ def episodes(url, info):
         episode = conn.get_episodes(url)
     with AddItem() as item:
         for e in episode:
-            info = {
-                'title': e['title'],
-                'plot': e['summary']
-            }
-            art = {
-                'poster': e['poster'],
-                'thumb': e['poster'],
-                'fanart': e['fanart']
-            }
+            info = conn.meta_info(e)
+            art = conn.meta_art(e)
             item.add(e['title'], routing.url_for(play, url=e['file'], info=info), info=info, art=art, folder=False)
     
 @routing.route('/video')
