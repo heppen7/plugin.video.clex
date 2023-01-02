@@ -2,12 +2,12 @@ from .utils.common import AddItem
 from .routing import Router
 from .plex.account import Account
 from .plex.connections import Connections
+from .utils.library import Library
 
 routing = Router()
 conn = Connections()
 account = Account()
-
-query = ['Konto', 'Odtwarzanie']
+manage_library = Library()
 
 def run():
     if not account.data():
@@ -22,7 +22,7 @@ def index():
         item.add('Hub', routing.url_for(hubs))
         item.add('Gatunki', routing.url_for(genres))
         item.add('Biblioteka', routing.url_for(libraries))
-        item.add('Zarządzaj Plex Media Server', routing.url_for(manage, query=query))
+        item.add('Zarządzaj Plex Media Server', routing.url_for(manage))
         
 
 @routing.route('/hubs')
@@ -127,19 +127,24 @@ def metadata(url, info):
             play(m[0]['file'], info)
     
 @routing.route('/play')
-def play(url, info):
+def play(url, info, library=None):
     file = None
     if isinstance(url, list):
         file = url[0]
     else:
         file = url
     with AddItem() as item:
-        item.play(info['title'], file, info=info)
+        if library is None:
+            item.play(info['title'], file=file, info=info)
+        else:
+            item.play(info['title'], file=file, info=info, library=True)
 
 
 @routing.route('/settings')
-def manage(query):
-    items = query
+def manage():
     with AddItem() as item:
-        for i in items:    
-            item.add(i, routing.url_for(index))
+        item.add('Zaimportuj bibliotekę', routing.url_for(select_libs))
+            
+@routing.route('/select_libs')
+def select_libs():
+    manage_library.options('movie')

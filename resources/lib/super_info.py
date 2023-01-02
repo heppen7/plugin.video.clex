@@ -63,6 +63,7 @@ class Super_Info:
                     file = part.attrib.get('key')
             info.append({
                 'title': video.attrib.get("title"),
+                'year': video.attrib.get('year'),
                 'summary': video.attrib.get('summary'),
                 'tagline': video.attrib.get('tagline'),
                 'poster': self.media(video.attrib.get("thumb")),
@@ -76,6 +77,7 @@ class Super_Info:
         for directory in shows:
             info.append({
                 'title': directory.attrib.get("title"),
+                'year': directory.attrib.get('year'),
                 'summary': directory.attrib.get('summary'),
                 'tagline': directory.attrib.get('tagline'),
                 'poster': self.media(directory.attrib.get("thumb")),
@@ -89,6 +91,7 @@ class Super_Info:
         for directory in season:
             info.append({
                 'title': directory.attrib.get("title"),
+                'year': directory.attrib.get('year'),
                 'summary': directory.attrib.get('summary'),
                 'poster': self.media(directory.attrib.get("thumb")),
                 'fanart': self.media(directory.attrib.get("art")),
@@ -105,6 +108,7 @@ class Super_Info:
                     file = part.attrib.get('key')
             info.append({
                 'title': video.attrib.get("title"),
+                'year': video.attrib.get('year'),
                 'summary': video.attrib.get('summary'),
                 'tagline': video.attrib.get('tagline'),
                 'poster': self.media(video.attrib.get("thumb")),

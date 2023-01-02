@@ -84,8 +84,13 @@ class Connections(PlexApi, Super_Info):
         data = self.request(self.libraries()['method'], self.libraries()['url'])
         if data.status_code == 200:
             for directory in xml.fromstring(data.content):
+                dirtype = directory.attrib.get('type')
                 for location in directory:
-                    libraries.append({'title': directory.attrib.get('title'), 'id': location.attrib.get('id')})
+                    libraries.append({
+                        'title': directory.attrib.get('title'), 
+                        'id': location.attrib.get('id'), 
+                        'type': dirtype
+                    })
             return libraries
         
     def get_library(self, lib_id):

@@ -31,9 +31,12 @@ class AddItem:
             xbmcplugin.setContent(handle, content)
         xbmcplugin.addDirectoryItem(handle, url, listitem, isFolder=folder)
         
-    def play(self, title, file, info):
-        listitem = ListItem(label=title)
+    def play(self, title, file, info, library=None):
+        listitem = ListItem(label=title, path=file)
         listitem.setProperty('IsPlayable', 'true')
         if info:
             listitem.setInfo('video', info)
-        xbmc.Player().play(item=file, listitem=listitem)
+        if library is None:
+            xbmc.Player().play(item=file, listitem=listitem)
+        else:
+            xbmcplugin.setResolvedUrl(handle, True, listitem)

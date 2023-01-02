@@ -12,7 +12,9 @@ CONFIG = {
     'addon': ADDON,
     'name': ADDON.getAddonInfo('name'),
     'icon': ADDON.getAddonInfo('icon'),
-    'version': ADDON.getAddonInfo('version')
+    'version': ADDON.getAddonInfo('version'),
+    'movies_path': ADDON.getAddonInfo('profile') + 'movies',
+    'shows_path': ADDON.getAddonInfo('profile') + 'tvshows',
 }
 
 try:
