@@ -3,11 +3,11 @@ from .routing import Router
 from .plex.account import Account
 from .plex.connections import Connections
 from .utils.library import Library
+from .utils.config import lang
 
 routing = Router()
 conn = Connections()
 account = Account()
-manage_library = Library()
 
 def run():
     if not account.data():
@@ -147,4 +147,14 @@ def manage():
             
 @routing.route('/select_libs')
 def select_libs():
-    manage_library.options('movie')
+    with AddItem() as item:
+        item.add(lang(32008), routing.url_for(import_movies))
+        item.add(lang(32009), routing.url_for(import_tvshows))
+        
+@routing.route('/movies_importing')
+def import_movies():
+    Library('movie').options()
+    
+@routing.route('/tvshows_importing')
+def import_tvshows():
+    Library('show').options()

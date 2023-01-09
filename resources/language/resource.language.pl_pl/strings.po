@@ -43,3 +43,11 @@ msgstr "Ścieżka dla filmów"
 msgctxt "#32007"
 msgid "TvShows path"
 msgstr "Ścieżka dla seriali"
+
+msgctxt "#32008"
+msgid "Movies"
+msgstr "Filmy"
+
+msgctxt "#32009"
+msgid "TvShows"
+msgstr "Seriale"

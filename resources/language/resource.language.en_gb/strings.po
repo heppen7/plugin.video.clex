@@ -43,3 +43,11 @@ msgstr ""
 msgctxt "#32007"
 msgid "TvShows path"
 msgstr ""
+
+msgctxt "#32008"
+msgid "Movies"
+msgstr ""
+
+msgctxt "#32009"
+msgid "TvShows"
+msgstr ""

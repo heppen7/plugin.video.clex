@@ -23,8 +23,8 @@ CONFIG = {
     'name': ADDON.getAddonInfo('name'),
     'icon': ADDON.getAddonInfo('icon'),
     'version': ADDON.getAddonInfo('version'),
-    'movies': get_setting('movies'),
-    'tvshows': get_setting('tvshows'),
+    'movie': get_setting('movies'),
+    'show': get_setting('tvshows'),
 }
 
 try:

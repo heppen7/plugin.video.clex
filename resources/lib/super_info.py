@@ -1,4 +1,5 @@
 import xml.etree.ElementTree as xml
+from datetime import datetime
 
 class Super_Info:
     
@@ -8,16 +9,16 @@ class Super_Info:
             'title': info.get("title"),
             'summary': info.get('summary'),
             'tagline': info.get('tagline'),
-            'year': int(info.get('year')) if info.get('year') else None,
+            'year': info.get('year'),
             'studio': info.get('studio'),
             'country': info.get('country'),
             'genre': info.get('genre'),
             'director': info.get('director'),
             'writer': info.get('writer'),
             'cast': info.get('cast'),
-            'rating': float(info.get('rating')) if info.get('rating') else 0,
-            'userrating': int(float(info.get('userrating'))) if info.get('userrating') else 0,
-            'duration': int(int(info.get('duration'))/1000) if info.get('duration') else None,
+            'rating': info.get('rating'),
+            'userrating': info.get('userrating'),
+            'duration': info.get('duration'),
             'premiered': info.get('premiered'),
             'bitrate': info.get('bitrate'),
             'width': info.get('width'),
@@ -31,6 +32,7 @@ class Super_Info:
             'videoProfile': info.get('videoProfile'),
             'poster': self.media(info.get("thumb")),
             'fanart': self.media(info.get("art")),
+            'added':  info.get('added'),
             'path': self.media(info.get('key'))
         }
     
@@ -108,6 +110,7 @@ class Super_Info:
                 'videoProfile': media.attrib.get('videoProfile'),
                 'poster': self.media(video.attrib.get("thumb")),
                 'fanart': self.media(video.attrib.get("art")),
+                'added': video.attrib.get('updatedAt'),
                 'path': self.media(part.attrib.get('key')),
             } for video in videos for media in video for part in media]
     
@@ -140,6 +143,7 @@ class Super_Info:
                 'videoProfile': directory.attrib.get('videoProfile'),
                 'poster': self.media(directory.attrib.get("thumb")),
                 'fanart': self.media(directory.attrib.get("art")),
+                'added': directory.attrib.get('updatedAt'),
                 'key': self.media(directory.attrib.get('key')),
             } for directory in shows]
 
@@ -172,6 +176,7 @@ class Super_Info:
                 'videoProfile': directory.attrib.get('videoProfile'),
                 'poster': self.media(directory.attrib.get("thumb")),
                 'fanart': self.media(directory.attrib.get("art")),
+                'added': directory.attrib.get('updatedAt'),
                 'key': self.media(directory.attrib.get('key')),
             } for directory in season]
 
@@ -204,5 +209,6 @@ class Super_Info:
                 'videoProfile': media.attrib.get('videoProfile'),
                 'poster': self.media(video.attrib.get("thumb")),
                 'fanart': self.media(video.attrib.get("art")),
+                'added': video.attrib.get('updatedAt'),
                 'path': self.media(part.attrib.get('key')),
             } for video in episode for media in video for part in media]
