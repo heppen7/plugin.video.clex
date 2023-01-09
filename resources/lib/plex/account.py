@@ -50,7 +50,7 @@ class Account(Connections):
         auth_token = get_setting('auth_token')
         
         if not self.pms_data():
-            self.get_pms_res()
+            return self.get_pms_res()
         else:
             if client_id != '' and auth_token != '':
                 return True

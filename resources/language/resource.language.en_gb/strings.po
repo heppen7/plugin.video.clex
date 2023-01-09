@@ -31,3 +31,15 @@ msgstr ""
 msgctxt "#32004"
 msgid "Close"
 msgstr ""
+
+msgctxt "#32005"
+msgid "Library"
+msgstr ""
+
+msgctxt "#32006"
+msgid "Movies path"
+msgstr ""
+
+msgctxt "#32007"
+msgid "TvShows path"
+msgstr ""

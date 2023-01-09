@@ -4,9 +4,34 @@ class Super_Info:
     
     def meta_info(self, info):
         return {
-            'title': info.get('title'),
-            'plot': info.get('summary'),
-            'plotoutline': info.get('tagline')
+            'mediatype': info.get("mediatype"),
+            'title': info.get("title"),
+            'summary': info.get('summary'),
+            'tagline': info.get('tagline'),
+            'year': int(info.get('year')) if info.get('year') else None,
+            'studio': info.get('studio'),
+            'country': info.get('country'),
+            'genre': info.get('genre'),
+            'director': info.get('director'),
+            'writer': info.get('writer'),
+            'cast': info.get('cast'),
+            'rating': float(info.get('rating')) if info.get('rating') else 0,
+            'userrating': int(float(info.get('userrating'))) if info.get('userrating') else 0,
+            'duration': int(int(info.get('duration'))/1000) if info.get('duration') else None,
+            'premiered': info.get('premiered'),
+            'bitrate': info.get('bitrate'),
+            'width': info.get('width'),
+            'height': info.get('height'),
+            'aspectRatio': info.get('aspectRatio'),
+            'audioChannels': info.get('audioChannels'),
+            'audioCodec': info.get('audioCodec'),
+            'videoCodec': info.get('videoCodec'),
+            'videoResolution': info.get('videoResolution'),
+            'videoFrameRate': info.get('videoFrameRate'),
+            'videoProfile': info.get('videoProfile'),
+            'poster': self.media(info.get("thumb")),
+            'fanart': self.media(info.get("art")),
+            'path': self.media(info.get('key'))
         }
     
     def meta_art(self, art):
@@ -55,64 +80,129 @@ class Super_Info:
         return info
     
     def movie(self, videos):
-        info = []
-        file = None
-        for video in videos:
-            for media in video:
-                for part in media:
-                    file = part.attrib.get('key')
-            info.append({
+        return [{
+                'mediatype': video.attrib.get("type"),
                 'title': video.attrib.get("title"),
-                'year': video.attrib.get('year'),
                 'summary': video.attrib.get('summary'),
                 'tagline': video.attrib.get('tagline'),
+                'year': video.attrib.get('year'),
+                'studio': video.attrib.get('studio'),
+                'country': [e.attrib.get('tag') for e in video.findall('.//Country')],
+                'genre': [e.attrib.get('tag') for e in video.findall('.//Genre')],
+                'director': [e.attrib.get('tag') for e in video.findall('.//Director')],
+                'writer': [e.attrib.get('tag') for e in video.findall('.//Writer')],
+                'cast': [e.attrib.get('tag') for e in video.findall('.//Role')],
+                'rating': video.attrib.get('rating'),
+                'userrating': video.attrib.get('audienceRating'),
+                'duration': video.attrib.get('duration'),
+                'premiered': video.attrib.get('originallyAvailableAt'),
+                'bitrate': media.attrib.get('bitrate'),
+                'width': media.attrib.get('width'),
+                'height': media.attrib.get('height'),
+                'aspectRatio': media.attrib.get('aspectRatio'),
+                'audioChannels': media.attrib.get('audioChannels'),
+                'audioCodec': media.attrib.get('audioCodec'),
+                'videoCodec': media.attrib.get('videoCodec'),
+                'videoResolution': media.attrib.get('videoResolution'),
+                'videoFrameRate': media.attrib.get('videoFrameRate'),
+                'videoProfile': media.attrib.get('videoProfile'),
                 'poster': self.media(video.attrib.get("thumb")),
                 'fanart': self.media(video.attrib.get("art")),
-                'file': self.media(file)
-            })
-        return info
+                'path': self.media(part.attrib.get('key')),
+            } for video in videos for media in video for part in media]
     
     def show(self, shows):
-        info = []
-        for directory in shows:
-            info.append({
+        return [{
+                'mediatype': directory.attrib.get("type"),
                 'title': directory.attrib.get("title"),
-                'year': directory.attrib.get('year'),
                 'summary': directory.attrib.get('summary'),
                 'tagline': directory.attrib.get('tagline'),
+                'year': directory.attrib.get('year'),
+                'studio': directory.attrib.get('studio'),
+                'country': [e.attrib.get('tag') for e in directory.findall('.//Country')],
+                'genre': [e.attrib.get('tag') for e in directory.findall('.//Genre')],
+                'director': [e.attrib.get('tag') for e in directory.findall('.//Director')],
+                'writer': [e.attrib.get('tag') for e in directory.findall('.//Writer')],
+                'cast': [e.attrib.get('tag') for e in directory.findall('.//Role')],
+                'rating': directory.attrib.get('rating'),
+                'userrating': directory.attrib.get('audienceRating'),
+                'duration': directory.attrib.get('duration'),
+                'premiered': directory.attrib.get('originallyAvailableAt'),
+                'bitrate': directory.attrib.get('bitrate'),
+                'width': directory.attrib.get('width'),
+                'height': directory.attrib.get('height'),
+                'aspectRatio': directory.attrib.get('aspectRatio'),
+                'audioChannels': directory.attrib.get('audioChannels'),
+                'audioCodec': directory.attrib.get('audioCodec'),
+                'videoCodec': directory.attrib.get('videoCodec'),
+                'videoResolution': directory.attrib.get('videoResolution'),
+                'videoFrameRate': directory.attrib.get('videoFrameRate'),
+                'videoProfile': directory.attrib.get('videoProfile'),
                 'poster': self.media(directory.attrib.get("thumb")),
                 'fanart': self.media(directory.attrib.get("art")),
-                'key': self.media(directory.attrib.get("key"))
-            })
-        return info
+                'key': self.media(directory.attrib.get('key')),
+            } for directory in shows]
 
     def season(self, season):
-        info = []
-        for directory in season:
-            info.append({
+        return [{
+                'mediatype': directory.attrib.get("type"),
                 'title': directory.attrib.get("title"),
-                'year': directory.attrib.get('year'),
                 'summary': directory.attrib.get('summary'),
+                'tagline': directory.attrib.get('tagline'),
+                'year': directory.attrib.get('year'),
+                'studio': directory.attrib.get('studio'),
+                'country': [e.attrib.get('tag') for e in directory.findall('.//Country')],
+                'genre': [e.attrib.get('tag') for e in directory.findall('.//Genre')],
+                'director': [e.attrib.get('tag') for e in directory.findall('.//Director')],
+                'writer': [e.attrib.get('tag') for e in directory.findall('.//Writer')],
+                'cast': [e.attrib.get('tag') for e in directory.findall('.//Role')],
+                'rating': directory.attrib.get('rating'),
+                'userrating': directory.attrib.get('audienceRating'),
+                'duration': directory.attrib.get('duration'),
+                'premiered': directory.attrib.get('originallyAvailableAt'),
+                'bitrate': directory.attrib.get('bitrate'),
+                'width': directory.attrib.get('width'),
+                'height': directory.attrib.get('height'),
+                'aspectRatio': directory.attrib.get('aspectRatio'),
+                'audioChannels': directory.attrib.get('audioChannels'),
+                'audioCodec': directory.attrib.get('audioCodec'),
+                'videoCodec': directory.attrib.get('videoCodec'),
+                'videoResolution': directory.attrib.get('videoResolution'),
+                'videoFrameRate': directory.attrib.get('videoFrameRate'),
+                'videoProfile': directory.attrib.get('videoProfile'),
                 'poster': self.media(directory.attrib.get("thumb")),
                 'fanart': self.media(directory.attrib.get("art")),
-                'key': self.media(directory.attrib.get("key"))
-            })
-        return info
+                'key': self.media(directory.attrib.get('key')),
+            } for directory in season]
 
     def episode(self, episode):
-        info = []
-        file = None
-        for video in episode:
-            for media in video:
-                for part in media:
-                    file = part.attrib.get('key')
-            info.append({
+        return [{
+                'mediatype': video.attrib.get("type"),
                 'title': video.attrib.get("title"),
-                'year': video.attrib.get('year'),
                 'summary': video.attrib.get('summary'),
                 'tagline': video.attrib.get('tagline'),
+                'year': video.attrib.get('year'),
+                'studio': video.attrib.get('studio'),
+                'country': [e.attrib.get('tag') for e in video.findall('.//Country')],
+                'genre': [e.attrib.get('tag') for e in video.findall('.//Genre')],
+                'director': [e.attrib.get('tag') for e in video.findall('.//Director')],
+                'writer': [e.attrib.get('tag') for e in video.findall('.//Writer')],
+                'cast': [e.attrib.get('tag') for e in video.findall('.//Role')],
+                'rating': video.attrib.get('rating'),
+                'userrating': video.attrib.get('audienceRating'),
+                'duration': video.attrib.get('duration'),
+                'premiered': video.attrib.get('originallyAvailableAt'),
+                'bitrate': media.attrib.get('bitrate'),
+                'width': media.attrib.get('width'),
+                'height': media.attrib.get('height'),
+                'aspectRatio': media.attrib.get('aspectRatio'),
+                'audioChannels': media.attrib.get('audioChannels'),
+                'audioCodec': media.attrib.get('audioCodec'),
+                'videoCodec': media.attrib.get('videoCodec'),
+                'videoResolution': media.attrib.get('videoResolution'),
+                'videoFrameRate': media.attrib.get('videoFrameRate'),
+                'videoProfile': media.attrib.get('videoProfile'),
                 'poster': self.media(video.attrib.get("thumb")),
                 'fanart': self.media(video.attrib.get("art")),
-                'file': self.media(file)
-            })
-        return info
+                'path': self.media(part.attrib.get('key')),
+            } for video in episode for media in video for part in media]

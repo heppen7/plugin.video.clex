@@ -1,16 +1,28 @@
 <?xml version="1.0" ?>
 <settings version="1">
     <section id="plugin.video.clex">
-        <category id="general" label="" help="">
-            <group id="1" label="">
-                <setting id="test01" type="string" label="32001" help="">
+        <category id="library" label="32005" help="">
+            <group id="1" label="32005">
+                <setting id="movies" type="path" label="32006" help="">
                     <level>0</level>
-                    <default/>
+                    <default>special://userdata/addon_data/plugin.video.clex/movies</default>
                     <constraints>
-                        <allowempty>true</allowempty>
+                        <writable>true</writable>
+                        <allowempty>false</allowempty>
                     </constraints>
-                    <control type="edit" format="string">
-                        <heading>32001</heading>
+                    <control type="button" format="path">
+                        <heading>32006</heading>
+                    </control>
+                </setting>
+                <setting id="tvshows" type="path" label="32007" help="">
+                    <level>0</level>
+                    <default>special://userdata/addon_data/plugin.video.clex/tvshows</default>
+                    <constraints>
+                        <writable>true</writable>
+                        <allowempty>false</allowempty>
+                    </constraints>
+                    <control type="button" format="path">
+                        <heading>32007</heading>
                     </control>
                 </setting>
             </group>

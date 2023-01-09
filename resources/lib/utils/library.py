@@ -3,9 +3,12 @@ from ..utils.dialogs import Dialogs
 from ..utils.config import CONFIG
 from ..routing import Router
 
+import xbmc
 import xbmcvfs
 from xbmcgui import ListItem
-from concurrent.futures import ThreadPoolExecutor   
+from concurrent.futures import ThreadPoolExecutor
+
+import xml.etree.ElementTree as xml
 
 router = Router()
 dialog = Dialogs()
@@ -44,14 +47,15 @@ class Library(Connections):
             results = executor.map(self.get_library, id_map)
             for result in results:
                 titles.append(result)
-            
-            return self.construct_urls(titles)
+
+        return self.construct_urls(titles)
     
     def construct_urls(self, data):
         urls = []
-        for d in data[0]:
-            urls.append(d)
-            
+        for d in data:
+            for n in d:
+                urls.append(n)
+ 
         return self.create_strm_dir(urls)
     
     def construct_strm(self, content):
@@ -60,7 +64,7 @@ class Library(Connections):
             self.create_strm(c['title'], c['year'], plugin_path)
     
     def create_strm_dir(self, urls):
-        path = xbmcvfs.translatePath(CONFIG["movies_path"]) + '/'
+        path = xbmcvfs.translatePath(CONFIG["movies"]) + '/'
         if not xbmcvfs.exists(path):
             success = xbmcvfs.mkdir(path)
             if success:
@@ -69,11 +73,18 @@ class Library(Connections):
             self.construct_strm(urls)
             
     def create_strm(self, title, year, content):
+        dir = f'{xbmcvfs.translatePath(CONFIG["movies"].rstrip("/"))}/{title} {year}/'
         title = title.replace(' ', '.')
-        file = f'{xbmcvfs.translatePath(CONFIG["movies_path"])}/{title}.{year}.strm'
-        if not xbmcvfs.exists(file):
+        file = f'{dir}{title}.{year}.strm'
+        if not xbmcvfs.exists(dir):
+            success = xbmcvfs.mkdir(dir)
+            if success:
+                if not xbmcvfs.exists(file):
+                    with xbmcvfs.File(file, 'w') as f:
+                        f.write(content)
+                else:
+                    return True
+        else:
             with xbmcvfs.File(file, 'w') as f:
                 f.write(content)
-        else:
-            return True
         

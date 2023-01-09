@@ -7,14 +7,24 @@ import platform
 ID = 'plugin.video.clex'
 ADDON = xbmcaddon.Addon(ID)
 
+def get_settings():
+    return ADDON.getSettings()
+
+def get_setting(key):
+    return ADDON.getSetting(key)
+
+def set_setting(key, value):
+    ADDON.setSetting(key, value)
+    return get_setting(key)
+
 CONFIG = {
     'id': ID,
     'addon': ADDON,
     'name': ADDON.getAddonInfo('name'),
     'icon': ADDON.getAddonInfo('icon'),
     'version': ADDON.getAddonInfo('version'),
-    'movies_path': ADDON.getAddonInfo('profile') + 'movies',
-    'shows_path': ADDON.getAddonInfo('profile') + 'tvshows',
+    'movies': get_setting('movies'),
+    'tvshows': get_setting('tvshows'),
 }
 
 try:
@@ -34,16 +44,6 @@ except:
 
 def lang(id):
     return ADDON.getLocalizedString(id)
-
-def get_settings():
-    return ADDON.getSettings()
-
-def get_setting(key):
-    return ADDON.getSetting(key)
-
-def set_setting(key, value):
-    ADDON.setSetting(key, value)
-    return get_setting(key)
 
 def get_device():
     device = None

@@ -46,7 +46,7 @@ def hub(key):
                 else:
                     item.add(video['title'], routing.url_for(metadata, url=video['key'], info=info), info=info, art=art, folder=False)
             else:
-                item.add(video['title'], routing.url_for(play, url=video['file'], info=info), info=info, art=art, folder=False)
+                item.add(video['title'], routing.url_for(play, url=video['path'], info=info), info=info, art=art, content='movies', folder=False)
 
 @routing.route('/genres')
 def genres():
@@ -62,7 +62,7 @@ def genre(key):
         for video in titles:
             info = conn.meta_info(video)
             art = conn.meta_art(video)
-            item.add(video['title'], routing.url_for(play, url=video['file'], info=info), folder=False, info=info, art=art)
+            item.add(video['title'], routing.url_for(play, url=video['path'], info=info), info=info, art=art, content='movies', folder=False)
 
 @routing.route('/libraries')
 def libraries():
@@ -81,7 +81,7 @@ def library(id):
             if video.get('key'):
                 item.add(video['title'], routing.url_for(seasons, url=video['key'], info=info), info=info, art=art)
             else:
-                item.add(video['title'], routing.url_for(play, url=video['file'], info=info), folder=False, info=info, art=art)
+                item.add(video['title'], routing.url_for(play, url=video['path'], info=info), info=info, art=art, content='movies', folder=False)
     
 @routing.route('/seasons')
 def seasons(url, info):
@@ -97,7 +97,7 @@ def seasons(url, info):
             if s.get('key'):
                 item.add(s['title'], routing.url_for(episodes, url=s['key'], info=info), info=info, art=art)
             else:
-                item.add(s['title'], routing.url_for(play, url=s['file'], info=info), info=info, art=art, folder=False)
+                item.add(s['title'], routing.url_for(play, url=s['path'], info=info), info=info, art=art, content='movies', folder=False)
     
     
 @routing.route('/episodes')
@@ -111,7 +111,7 @@ def episodes(url, info):
         for e in episode:
             info = conn.meta_info(e)
             art = conn.meta_art(e)
-            item.add(e['title'], routing.url_for(play, url=e['file'], info=info), info=info, art=art, folder=False)
+            item.add(e['title'], routing.url_for(play, url=e['path'], info=info), info=info, art=art, content='movies', folder=False)
     
 @routing.route('/video')
 def metadata(url, info):
@@ -124,7 +124,7 @@ def metadata(url, info):
             else:
                seasons(url[0], info)
         else:
-            play(m[0]['file'], info)
+            play(m[0]['path'], info)
     
 @routing.route('/play')
 def play(url, info, library=None):
