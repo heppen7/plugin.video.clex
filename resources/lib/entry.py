@@ -148,8 +148,8 @@ def manage():
 @routing.route('/select_libs')
 def select_libs():
     with AddItem() as item:
-        item.add(lang(32008), routing.url_for(import_movies))
-        item.add(lang(32009), routing.url_for(import_tvshows))
+        item.add(lang(32008), routing.url_for(import_movies), folder=False)
+        item.add(lang(32009), routing.url_for(import_tvshows), folder=False)
         
 @routing.route('/movies_importing')
 def import_movies():

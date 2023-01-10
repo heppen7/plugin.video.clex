@@ -11,6 +11,7 @@ session = requests.Session()
 class Connections(PlexApi, Super_Info):
     def __init__(self) -> None:
         super().__init__()
+        self.api_key = 'cf77b617e02513674bcac64abcf24702'
         
     def _get(self, url, params=None, headers=None):
         return session.get(url, params=params, headers=headers)
@@ -43,7 +44,7 @@ class Connections(PlexApi, Super_Info):
                             
     def get_playlists(self):
         data = self.request(self.playlists()['method'], self.playlists()['url'])
-        xbmc.log(f'{data.content}', level=1)
+        # TODO: implement this...
         
     def get_hubs(self):
         params = container_size()
@@ -107,3 +108,21 @@ class Connections(PlexApi, Super_Info):
         data = self.request('get', url)
         if data.status_code == 200:
             return self.extract_info(data.content)
+        
+    def get_tmdb_movie_id(self, title, year):
+        from datetime import datetime
+        data = self.request('get', 'https://api.themoviedb.org/3/search/movie', None, {'api_key': self.api_key, 'query': title}).json()
+        if data:
+            for result in data['results']:
+                release_date = datetime.strptime(result['release_date'], '%Y-%m-%d').strftime('%Y')
+                if title in result['original_title'] and int(year) == int(release_date):
+                    return result['id']
+        
+    def get_tmdb_show_id(self, title, year):
+        from datetime import datetime
+        data = self.request('get', 'https://api.themoviedb.org/3/search/tv', None, {'api_key': self.api_key, 'query': title}).json()
+        if data:
+            for result in data['results']:
+                air_year = datetime.strptime(result['first_air_date'], '%Y-%m-%d').strftime('%Y')
+                if title in result['name'] and int(year) == int(air_year):
+                    return result['id']

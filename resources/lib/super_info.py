@@ -1,5 +1,4 @@
 import xml.etree.ElementTree as xml
-from datetime import datetime
 
 class Super_Info:
     
@@ -7,6 +6,7 @@ class Super_Info:
         return {
             'mediatype': info.get("mediatype"),
             'title': info.get("title"),
+            'originalTitle': info.get('originalTitle'),
             'summary': info.get('summary'),
             'tagline': info.get('tagline'),
             'year': info.get('year'),
@@ -85,6 +85,7 @@ class Super_Info:
         return [{
                 'mediatype': video.attrib.get("type"),
                 'title': video.attrib.get("title"),
+                'originalTitle': video.attrib.get('originalTitle'),
                 'summary': video.attrib.get('summary'),
                 'tagline': video.attrib.get('tagline'),
                 'year': video.attrib.get('year'),
@@ -118,6 +119,7 @@ class Super_Info:
         return [{
                 'mediatype': directory.attrib.get("type"),
                 'title': directory.attrib.get("title"),
+                'originalTitle': directory.attrib.get('originalTitle'),
                 'summary': directory.attrib.get('summary'),
                 'tagline': directory.attrib.get('tagline'),
                 'year': directory.attrib.get('year'),
@@ -184,6 +186,10 @@ class Super_Info:
         return [{
                 'mediatype': video.attrib.get("type"),
                 'title': video.attrib.get("title"),
+                'parentTitle': video.attrib.get('parentTitle'),
+                'grandparentTitle': video.attrib.get('grandparentTitle'),
+                'index': video.attrib.get('index'),
+                'parentIndex': video.attrib.get('parentIndex'),
                 'summary': video.attrib.get('summary'),
                 'tagline': video.attrib.get('tagline'),
                 'year': video.attrib.get('year'),
