@@ -2,6 +2,7 @@ from xbmcgui import ListItem
 import xbmcplugin
 import xbmc
 from datetime import datetime
+import xml.etree.ElementTree as etree
 
 from .config import ADDON
 from ..routing import Router
@@ -83,3 +84,23 @@ class AddItem:
             xbmc.Player().play(item=file, listitem=listitem)
         else:
             xbmcplugin.setResolvedUrl(handle, True, listitem)
+            
+class XmlConverter:
+    def __init__(self, xml) -> None:
+        self._xml = xml
+        self.xml = etree.fromstring(self._xml)
+
+    def root(self, data):
+        return data.tag
+    
+    def xml_to_json(self, data):
+        root = {data.tag: data.attrib}
+        for child in data:
+            root[data.tag].update({child.tag: child.attrib})
+            if len(child):
+                for subchild in child:
+                    root[data.tag][child.tag].update({subchild.tag: subchild.attrib})
+                    if len(subchild):
+                        for sub in subchild:
+                            root[data.tag][child.tag][subchild.tag].update({sub.tag: sub.attrib})
+        return root
