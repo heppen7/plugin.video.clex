@@ -8,15 +8,15 @@ from .config import ADDON
 from ..routing import Router
 
 handle = Router().handle
-    
-    
+
+
 class AddItem:
     def __enter__(self):
         return self
-        
+
     def __exit__(self, *args, **kwargs):
         xbmcplugin.endOfDirectory(handle)
-        
+
     def _setinfo(self, listitem, info):
         videoinfo = listitem.getVideoInfoTag()
         if info.get('cast'):
@@ -46,19 +46,22 @@ class AddItem:
             rating = float(info.get('rating')) if info.get('rating') else 0
             videoinfo.setRating(rating)
         if info.get('userrating'):
-            userrating = int(float(info.get('userrating'))) if info.get('userrating') else 0
+            userrating = (int(float(info.get('userrating')))
+                          if info.get('userrating') else 0)
             videoinfo.setUserRating(userrating)
         if info.get('duration'):
-            duration = int(int(info.get('duration'))/1000) if info.get('duration') else None
+            duration = (int(int(info.get('duration'))/1000)
+                        if info.get('duration') else None)
             videoinfo.setDuration(duration)
         if info.get('premiered'):
             videoinfo.setPremiered(info['premiered'])
         if info.get('added'):
             dateadded = int(info['added'])
-            dateadded = datetime.fromtimestamp(dateadded).strftime('%Y-%m-%d') if isinstance(dateadded, int) else ''
+            dateadded = (datetime.fromtimestamp(dateadded).strftime('%Y-%m-%d')
+                         if isinstance(dateadded, int) else '')
             videoinfo.setDateAdded(dateadded)
         return listitem
-            
+
     def add(self, title, url, info=None, art=None, content=None, folder=True):
         listitem = ListItem(label=title)
         if info:
@@ -74,7 +77,7 @@ class AddItem:
         if content:
             xbmcplugin.setContent(handle, content)
         xbmcplugin.addDirectoryItem(handle, url, listitem, isFolder=folder)
-        
+
     def play(self, title, file, info, library=None):
         listitem = ListItem(label=title, path=file)
         listitem.setProperty('IsPlayable', 'true')
@@ -84,7 +87,8 @@ class AddItem:
             xbmc.Player().play(item=file, listitem=listitem)
         else:
             xbmcplugin.setResolvedUrl(handle, True, listitem)
-            
+
+
 class XmlConverter:
     def __init__(self, xml) -> None:
         self._xml = xml
@@ -92,15 +96,17 @@ class XmlConverter:
 
     def root(self, data):
         return data.tag
-    
+
     def xml_to_json(self, data):
         root = {data.tag: data.attrib}
         for child in data:
             root[data.tag].update({child.tag: child.attrib})
             if len(child):
                 for subchild in child:
-                    root[data.tag][child.tag].update({subchild.tag: subchild.attrib})
+                    root[data.tag][child.tag].update(
+                        {subchild.tag: subchild.attrib})
                     if len(subchild):
                         for sub in subchild:
-                            root[data.tag][child.tag][subchild.tag].update({sub.tag: sub.attrib})
+                            root[data.tag][child.tag][subchild.tag].update(
+                                {sub.tag: sub.attrib})
         return root

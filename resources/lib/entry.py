@@ -9,13 +9,15 @@ routing = Router()
 conn = Connections()
 account = Account()
 
+
 def run():
     if not account.data():
         if account.signin():
             routing.redirect('/')
     else:
         routing.run()
-        
+
+
 @routing.route('/')
 def index():
     with AddItem() as item:
@@ -23,7 +25,7 @@ def index():
         item.add('Gatunki', routing.url_for(genres))
         item.add('Biblioteka', routing.url_for(libraries))
         item.add('Zarządzaj Plex Media Server', routing.url_for(manage))
-        
+
 
 @routing.route('/hubs')
 def hubs():
@@ -32,7 +34,8 @@ def hubs():
         for h in hubs:
             if int(h['hub_size']) > 0:
                 item.add(h['hub_name'], routing.url_for(hub, key=h['key']))
-    
+
+
 @routing.route('/hub')
 def hub(key):
     videos = conn.get_hub(key[0])
@@ -42,11 +45,19 @@ def hub(key):
             art = conn.meta_art(video)
             if video.get('key'):
                 if 'children' in video['key']:
-                    item.add(video['title'], routing.url_for(metadata, url=video['key'], info=info), info=info, art=art)
+                    url = routing.url_for(metadata, url=video['key'],
+                                          info=info)
+                    item.add(video['title'], url, info=info, art=art)
                 else:
-                    item.add(video['title'], routing.url_for(metadata, url=video['key'], info=info), info=info, art=art, folder=False)
+                    url = routing.url_for(metadata, url=video['key'],
+                                          info=info)
+                    item.add(video['title'], url, info=info, art=art,
+                             folder=False)
             else:
-                item.add(video['title'], routing.url_for(play, url=video['path'], info=info), info=info, art=art, content='movies', folder=False)
+                url = routing.url_for(play, url=video['path'], info=info)
+                item.add(video['title'], url, info=info, art=art,
+                         content='movies', folder=False)
+
 
 @routing.route('/genres')
 def genres():
@@ -54,15 +65,19 @@ def genres():
     with AddItem() as item:
         for g in genres:
             item.add(g['name'], routing.url_for(genre, key=g['key']))
-       
-@routing.route('/genre') 
+
+
+@routing.route('/genre')
 def genre(key):
     titles = conn.get_genre(key)
     with AddItem() as item:
         for video in titles:
             info = conn.meta_info(video)
             art = conn.meta_art(video)
-            item.add(video['title'], routing.url_for(play, url=video['path'], info=info), info=info, art=art, content='movies', folder=False)
+            url = routing.url_for(play, url=video['path'], info=info)
+            item.add(video['title'], url, info=info, art=art, content='movies',
+                     folder=False)
+
 
 @routing.route('/libraries')
 def libraries():
@@ -70,7 +85,8 @@ def libraries():
     with AddItem() as item:
         for lib in libraries:
             item.add(lib['title'], routing.url_for(library, id=lib['id']))
-        
+
+
 @routing.route('/library')
 def library(id):
     videos = conn.get_library(id)
@@ -79,10 +95,14 @@ def library(id):
             info = conn.meta_info(video)
             art = conn.meta_art(video)
             if video.get('key'):
-                item.add(video['title'], routing.url_for(seasons, url=video['key'], info=info), info=info, art=art)
+                url = routing.url_for(seasons, url=video['key'], info=info)
+                item.add(video['title'], url, info=info, art=art)
             else:
-                item.add(video['title'], routing.url_for(play, url=video['path'], info=info), info=info, art=art, content='movies', folder=False)
-    
+                url = routing.url_for(play, url=video['path'], info=info)
+                item.add(video['title'], url, info=info, art=art,
+                         content='movies', folder=False)
+
+
 @routing.route('/seasons')
 def seasons(url, info):
     season = None
@@ -95,11 +115,14 @@ def seasons(url, info):
             info = conn.meta_info(s)
             art = conn.meta_art(s)
             if s.get('key'):
-                item.add(s['title'], routing.url_for(episodes, url=s['key'], info=info), info=info, art=art)
+                url = routing.url_for(episodes, url=s['key'], info=info)
+                item.add(s['title'], url, info=info, art=art)
             else:
-                item.add(s['title'], routing.url_for(play, url=s['path'], info=info), info=info, art=art, content='movies', folder=False)
-    
-    
+                url = routing.url_for(play, url=s['path'], info=info)
+                item.add(s['title'], url, info=info, art=art, content='movies',
+                         folder=False)
+
+
 @routing.route('/episodes')
 def episodes(url, info):
     episode = None
@@ -111,8 +134,11 @@ def episodes(url, info):
         for e in episode:
             info = conn.meta_info(e)
             art = conn.meta_art(e)
-            item.add(e['title'], routing.url_for(play, url=e['path'], info=info), info=info, art=art, content='movies', folder=False)
-    
+            url = routing.url_for(play, url=e['path'], info=info)
+            item.add(e['title'], url, info=info, art=art, content='movies',
+                     folder=False)
+
+
 @routing.route('/video')
 def metadata(url, info):
     meta = conn.get_metadata(url[0])
@@ -122,10 +148,11 @@ def metadata(url, info):
                 if 'allLeaves' in m[0]['key']:
                     episodes(m[0]["key"], info)
             else:
-               seasons(url[0], info)
+                seasons(url[0], info)
         else:
             play(m[0]['path'], info)
-    
+
+
 @routing.route('/play')
 def play(url, info, library=None):
     file = None
@@ -144,17 +171,20 @@ def play(url, info, library=None):
 def manage():
     with AddItem() as item:
         item.add('Zaimportuj bibliotekę', routing.url_for(select_libs))
-            
+
+
 @routing.route('/select_libs')
 def select_libs():
     with AddItem() as item:
         item.add(lang(32008), routing.url_for(import_movies), folder=False)
         item.add(lang(32009), routing.url_for(import_tvshows), folder=False)
-        
+
+
 @routing.route('/movies_importing')
 def import_movies():
     Library('movie').options()
-    
+
+
 @routing.route('/tvshows_importing')
 def import_tvshows():
     Library('show').options()
