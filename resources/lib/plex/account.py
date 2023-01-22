@@ -14,7 +14,7 @@ class Account(Connections):
         super().__init__()
 
     def pin_asking(self):
-        data = self.request(self.pins()['method'], self.pins()['url'],
+        data = self.request(self.pins()['meth'], self.pins()['url'],
                             headers=plex_identification()).content
         for child in xml.fromstring(data):
             if child.attrib.get("status") == 400:
@@ -24,7 +24,7 @@ class Account(Connections):
                         'code': xml.fromstring(data).attrib["code"]}
 
     def token_asking(self, pin_id):
-        data = self.request(self.token(pin_id)['method'],
+        data = self.request(self.token(pin_id)['meth'],
                             self.token(pin_id)['url'],
                             headers=plex_identification()).content
         for child in xml.fromstring(data):
